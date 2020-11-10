@@ -1,0 +1,14 @@
+{
+  "name": "foolance",
+  "version": "1.0.0",
+  "description": "timetracker for foolancers",
+  "main": "index.html",
+  "author": "Jan Huggenberg",
+  "scripts": {
+    "start": "parcel serve ./src/index.html",
+    "build": "parcel build ./src/index.html"
+  },
+  "devDependencies": {
+    "parcel": "next"
+  }
+}
