@@ -12,5 +12,8 @@
   "dependencies": {
     "mongodb": "^3.6.3",
     "parcel-bundler": "^1.12.4"
-  }
+  },
+  "browserslist": [
+    "since 2017-06"
+  ]
 }
