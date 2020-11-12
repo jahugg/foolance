@@ -1,5 +1,6 @@
 // trying to add this due to "dns.resolveSrv is not a function" error
 // "yarn add dns" throws an error too...
+// "yarn --ignore-engines add dns" works but does not fix the issue
 var dns = require('dns');
 
 // code example from mongoDB
