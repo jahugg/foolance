@@ -1,0 +1,13 @@
+{
+  "name": "foo",
+  "version": "1.0.0",
+  "scripts": {
+    "run": "node main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^3.6.3"
+  }
+}
