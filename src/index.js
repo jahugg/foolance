@@ -1,48 +1,76 @@
-console.log("I'm running.");
+const { response } = require('express');
 
-// code example from mongoDB
-// const MongoClient = require('mongodb').MongoClient;
-// const uri = "mongodb+srv://foolancer:BPxynHWiCy1kDsjL@cluster0.w9rrm.mongodb.net/foolance?retryWrites=true&w=majority";
-// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-// client.connect(err => {
-//   const collection = client.db("foolance").collection("trackers");
-//   // perform actions on the collection object
-//   console.log(collection);
-//   client.close();
-// });
+const form = document.getElementById('add-tracker');
+const display = document.getElementById('tracker-list');
+const trackerUserInput = document.getElementById('add-tracker__input');
 
-// solution from https://www.youtube.com/watch?v=M9Fs-CCe0Jo
-// is throwing the same dns error...
-// connect();
-// async function connect() {
-//     const client = new MongoClient(uri);
+// fetch API (GET REQUEST)
+const getTodos = () => {
+  fetch('/getTodos', { method: 'get' })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      displayTodos(data);
+    });
+};
 
-//     try {
-//         await client.connect();
-//         const db = client.db(`foolance`);
-//         console.log(`Connected to database ${db.databaseName}`);
-//     }
-//     catch (ex) {
-//         console.error(`Exception: ${ex}`);
-//     }
-//     finally {
-//         client.close();
-//     }
-// }
+// submitting
+form.submit((e) => {
+  e.preventDefault;
+  fetch('/', {
+    method: 'post',
+    body: JSON.stringify({ tracker: todoUserInput.val() }),
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      if (data.result.ok == 1 && data.result.n == 1) {
+        let ids = buildIDS(data.document);
+        display.append(buildTemplate(data.document, ids));
+        //   editTodo(data.document.ids.todoID,ids.editID);
+        //   deleteTodo(data.document, ids.listItemID,ids.deleteID);
+      }
+      resetTrackerInput();
+    });
+});
 
+getTodos();
 
-// sevis solution
-// async function main() {
+// helper functions
+const resetTrackerInput = () => {
+  trackerUserInput.setAttribute('val', '');
+};
 
-//     const url = 'mongodb://localhost:27017';
-//     const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-//     await client.connect();
+const buildIDS = (tracker) => {
+  return {
+    editID: 'edit_' + tracker._id,
+    deleteID: 'delete_' + tracker._id,
+    listItemID: 'listItem_' + tracker._id,
+    trackerID: 'tracker_' + tracker._id,
+  };
+};
 
-//     const collection = client.db("foolance").collection("trackers");
-//     await collection.insertOne({ name: 'jan', hours: 3 });
-//     await collection.insertOne({ name: 'sev', hours: 1 });
-//     var docs = await collection.find({}).toArray();
-//     console.log(docs);
+const buildTemplate = (tracker, ids) => {
+  let item = document.createElement('li');
+  item.id = ids.listItemID;
+  item.innerHTML = `<div id="${ids.trackerID}">${tracker.tracker}</div>
+        <button type="button" id="${ids.editID}">Edit</button>
+        <button type="button" id="${ids.deleteID}">Delete</button>`;
 
-//     await client.close();
-// };
+  return item;
+};
+
+const displayTodos = (data) => {
+  data.forEach((tracker) => {
+    let ids = buildIDS(tracker);
+    display.append(buildTemplate(tracker, ids));
+    // editTodo(tracker, ids.trackerID, ids.editID);
+    // deleteTodo(tracker, ids.listItemID, ids.deleteID);
+  });
+};
