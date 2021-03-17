@@ -1,5 +1,3 @@
-const { response } = require('express');
-
 const form = document.getElementById('add-tracker');
 const display = document.getElementById('tracker-list');
 const trackerUserInput = document.getElementById('add-tracker__input');
